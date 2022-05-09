@@ -54,12 +54,12 @@ def plot(x2, y2, df, phis2, distance):
                         arrowprops=dict(arrowstyle="->"))
     annot.set_visible(False)
     fig.canvas.mpl_connect("motion_notify_event", hover)
-    # Show track statistic box
+    # Show circuit statistic box
     props = dict(boxstyle='round', facecolor='white', alpha=0.6)
-    textstr = f' Track length: {round(distance,2)} \n Corners: {len(text_x)}'
+    textstr = f' Circuit length: {round(distance,2)} \n Corners: {len(text_x)}'
     ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=14,
             verticalalignment='top', bbox=props)
-    # Plot full track in black
+    # Plot full circuit in black
     plt.plot(x2, y2, color='black', linewidth=4)
     plt.axis('equal')
     plt.show()
@@ -77,7 +77,7 @@ def plot_plain(x2, y2, df, phis2, distance):
         plt.plot(corners[0], corners[1], color='grey', linewidth=10)
         plt.plot(corners[0], corners[1], color='white', linewidth=5.5)
         plt.plot(corners[0], corners[1], 'r:', linewidth=5.5)
-    # Full track
+    # Full circuit
     plt.plot(x2, y2, color='black', linewidth=4, label=f'length = {round(distance, 2)}')
     plt.axis('equal')
     plt.legend()
