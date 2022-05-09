@@ -2,18 +2,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from scipy.interpolate import interp1d, CubicSpline
+from rcg_plot import plot, plot_plain
 
 def pol2cart(rho, phi):
+    """
+    Convert polar coordinates to cartesian
+    """
     x = rho * np.cos(phi)
     y = rho * np.sin(phi)
     return(x, y)
 
-# Parameters for random circuit generator | all will be random in future
-corners = np.random.randint(12,20) # amount of corners
+def cart2pol(x, y):
+    """
+    Convert cartesian coordinates to polar
+    """
+    rho = np.sqrt(x**2 + y**2)
+    phi = np.arctan2(y, x)
+    return(rho, phi)
+
+# Parameters for random circuit generator 
+corners = np.random.randint(12,30) # amount of corners
+
 while True:
     # Random numbers
-    rho_base = np.random.randint(12,15)
-    rho_spread = np.random.randint(4,8)
+    rho_base = np.random.randint(10,20)
+    rho_spread = np.random.randint(2,8)
 
     # Create points
     phis = np.sort(np.random.rand(corners)*2*math.pi)
@@ -44,15 +57,17 @@ while True:
     else:
         continue
 
-# Fancy plot
-plt.rcParams['axes.facecolor'] = '#8FCF4C'
-plt.plot(x2, y2, color='darkgreen', linewidth=10)
-for i in df:
-    corners = (x2[np.where(abs(phis2-i) < 0.1)], y2[np.where(abs(phis2-i) < 0.1)])
-    plt.plot(corners[0], corners[1], color='grey', linewidth=10)
-    plt.plot(corners[0], corners[1], color='white', linewidth=5.5)
-    plt.plot(corners[0], corners[1], 'r:', linewidth=5.5)
-plt.plot(x2, y2, color='black', linewidth=4, label=f'length = {round(distance, 2)}')
-plt.axis('equal')
-plt.legend()
-plt.show()
+# Nice plot with statistics and corner labels
+plot(x2, y2, df, phis2, distance)
+
+# Simple plot with just the track
+plot_plain(x2, y2, df, phis2, distance)
+
+# -------------------------------------------------------------------
+# To fix/add:
+# Add more randomness
+# Add main straight -> add pits
+# Simulate cars?
+# Make game out of it
+# Add random name
+# Possibility of double-circuit -> i.e. 2 parts of track at one phi
