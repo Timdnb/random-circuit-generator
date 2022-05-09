@@ -1,7 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import math
-from scipy.interpolate import interp1d, CubicSpline
+from scipy.interpolate import CubicSpline
 from rcg_plot import plot, plot_plain
 
 def pol2cart(rho, phi):
@@ -23,6 +22,7 @@ def cart2pol(x, y):
 # Parameters for random circuit generator 
 corners = np.random.randint(12,30) # amount of corners
 
+# Let it loop until it finds a circuit which looks reasonable
 while True:
     # Random numbers
     rho_base = np.random.randint(10,20)
@@ -52,7 +52,6 @@ while True:
     # Filter out weird circuits
     if min(rhos2) > 0 and max(rhos2) < 3*rho_base:
         distance = sum(((x2[i]-x2[i-1])**2+(y2[i]-y2[i-1])**2)**0.5 for i in range(1,len(x2)))
-        print(distance)
         break
     else:
         continue
@@ -60,13 +59,21 @@ while True:
 # Nice plot with statistics and corner labels
 plot(x2, y2, df, phis2, distance)
 
-# Simple plot with just the track
-plot_plain(x2, y2, df, phis2, distance)
+# # Simple plot with just the circuit
+# plot_plain(x2, y2, df, phis2, distance)
+
+# Export cicruit coordinates to text file or numpy file
+with open('export/circuit.txt', 'w') as f:
+    for i in range(len(x2)):
+        f.write(str(x2[i])+' '+str(y2[i])+'\n')
+
+with open('export/circuit.npy', 'wb') as f:
+    np.save(f, [x2, y2])
 
 # -------------------------------------------------------------------
 # To fix/add:
 # Add more randomness
-# Add main straight -> add pits
+# Add main straight -> add pits (graphically)
 # Simulate cars?
 # Make game out of it
 # Add random name
